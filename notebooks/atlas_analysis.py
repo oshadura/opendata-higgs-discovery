@@ -38,8 +38,7 @@ def good_leptons(source: ObjectStream) -> ObjectStream:
                              'lep_z0': e.lep_z0,
                              'mcWeight': e.mcWeight,
                              'scaleFactor': e.scaleFactor_ELE*e.scaleFactor_MUON*e.scaleFactor_LepTRIGGER*e.scaleFactor_PILEUP,
-                         }) \
-        .AsParquetFiles('junk.parquet')
+                         })
 
 
 class ATLAS_Higgs_4L(Analysis):
@@ -175,7 +174,7 @@ def make_ds(name: str, query: ObjectStream):
     '''
     from utils import files
     is_data = name == 'data'
-    datasets = [ServiceXDataset(files[name]['files'], backend_type='open_uproot', image='sslhep/servicex_func_adl_uproot_transformer:pr_fix_awk_bug')]
+    datasets = [ServiceXDataset(files[name]['files'], backend_name='open_uproot')]
     return DataSource(query=query, metadata={'dataset': name, 'is_data': is_data}, datasets=datasets)
 
 
@@ -194,13 +193,12 @@ async def run_atlas_4l_analysis(ds_names: Union[str,List[str]]):
         ds_names = list(files.keys())
 
     # Create the query
-    ds = ServiceXSourceUpROOT('cernopendata://dummy',  "mimi", backend='open_uproot')
+    ds = ServiceXSourceUpROOT('cernopendata://dummy',  "mini", backend_name='open_uproot')
     ds.return_qastle = True
     leptons = good_leptons(apply_event_cuts(ds))
 
-    # Get data source for this run
-    # TODO: Why do I need to tell it the datatype?
-    executor = LocalExecutor(datatype='parquet')
+    executor = LocalExecutor()
+    #executor = DaskExecutor(client_addr="tls://localhost:8786")
     datasources = [make_ds(ds_name, leptons) for ds_name in ds_names]
 
     # Create the analysis and we can run from there.
