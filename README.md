@@ -19,17 +19,15 @@ You'll need a `servicex.yaml` file in your home directory that contains somethin
 
 ```
 api_endpoints:
-  - endpoint: http://xxx.org
-    type: open_uproot
-  - endpoint: http://yyy.org
+  - name: uproot
+    endpoint: http://xxx.org
+    type: uproot
+  - name: cms_run1_aod
+    endpoint: http://xxx.org
     type: cms_run1_aod
-
-
-backend_types:
-  - type: open_uproot
-    return_data: parquet
-  - type: cms_run1_aod
-    return_data: root
+  - name: open_uproot
+    endpoint: http://xxx.org
+    type: open_uproot
 ```
 
 Please get in touch with us to get the address of the open instances running `ServiceX`.
@@ -39,13 +37,9 @@ Please get in touch with us to get the address of the open instances running `Se
 Setup your environment:
 
 1. This has been run under python 3.9.6. It should work with anything that is 3.7 or greater.
-
-1. Check out this repository locally, and check out the [coffea patched repository locally](https://github.com/gordonwatts/coffea).
-1. For the `coffea` repository, check out the branch [pr_servicex_flat_root_files](https://github.com/gordonwatts/coffea/tree/pr_servicex_flat_root_files). For this package use the head.
 1. `python -m venv .venv`, and activate the new environment.
 1. `pip install -r requirements.txt`
-1. In the root directory of the checked out `coffea` package, run `pip install -e[servicex]`.
-1. Repeat the `pip instlal -r requirements.txt` command as `coffea` will over-write one of the packages needed.
+1. Run `pip install coffea[servicex]`.
 
 From there you can start `jupyter-lab`.
 
