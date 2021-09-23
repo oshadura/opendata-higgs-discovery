@@ -9,8 +9,7 @@ dask[distributed]
 # do this install by hand.
 wheel
 
-# coffea[servicex] -- Currently needs the https://github.com/gordonwatts/coffea/tree/pr_servicex_executors version.
-git+https://github.com/gordonwatts/coffea.git@pr_nano_open_uri#egg=coffea[servicex]
+coffea[servicex]
 
 # To help with writing code
 flake8
